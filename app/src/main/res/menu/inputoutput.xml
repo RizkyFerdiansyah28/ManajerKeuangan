@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/in"
+        android:icon="@drawable/input"
+        android:title="uang masuk" />
+    <item
+        android:id="@+id/out"
+        android:icon="@drawable/output"
+        android:title="uang keluar"/>
+</menu>

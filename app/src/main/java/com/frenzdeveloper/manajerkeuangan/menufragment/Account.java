@@ -1,0 +1,137 @@
+package com.frenzdeveloper.manajerkeuangan.menufragment;
+
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.frenzdeveloper.manajerkeuangan.MainActivity;
+import com.frenzdeveloper.manajerkeuangan.R;
+import com.frenzdeveloper.manajerkeuangan.loginregister.LoginActivity;
+import com.frenzdeveloper.manajerkeuangan.loginregister.RegisterActivity;
+import com.frenzdeveloper.manajerkeuangan.sp_agent.SPAgent;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link Account#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class Account extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private Button btnToLogin, btnToRegis, btnLogout;
+    private AlertDialog.Builder alert;
+
+    public Account() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Account.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static Account newInstance(String param1, String param2) {
+        Account fragment = new Account();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_account, container, false);
+        load(v);
+
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Toolbar toolbar = v.findViewById(R.id.custom_account_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        getActivity().setTitle("Akun");
+
+        alert = new AlertDialog.Builder(getActivity());
+
+//        UNTUK MENGATUR BUTTON TERGANTUNG USER TERLOGIN
+        if (SPAgent.getIdLoggedIn(getContext()) == 1 ){
+            btnLogout.setVisibility(View.GONE);
+        }else{
+            btnToLogin.setVisibility(View.GONE);
+            btnToRegis.setVisibility(View.GONE);
+        }
+        btnToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), LoginActivity.class));
+            }
+        });
+        btnToRegis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RegisterActivity.class));
+            }
+        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.setMessage("Anda yakin ingin logout?").setCancelable(false)
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SPAgent.clearLoggedInUser(getContext());
+                        SPAgent.setIdLoggedIn(getContext(), 1);
+                        SPAgent.setUsernameLoggedIn(getContext(), "Guest");
+                        getActivity().finish();
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                    }
+                }).setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
+        return v;
+    }
+
+    void load(View v){
+        btnToLogin = v.findViewById(R.id.btnToLogin);
+        btnToRegis = v.findViewById(R.id.btnToRegister);
+        btnLogout = v.findViewById(R.id.btnLogout);
+    }
+}

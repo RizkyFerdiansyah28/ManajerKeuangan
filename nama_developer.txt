@@ -1,0 +1,3 @@
+Ahmadin Laisa Furrahmifa XII-RPL 03 => "Bagian Front End dan membuat REST Client di android"
+Muhammad Rizky Ferdiansyah XII-RPL 26 => "Membuat REST Server menggunakan laravel dan menyusun desain layout android"
+Dhimas Alfan Hidayat XII-RPL 08 => "Membuat desain UI dengan Figma dan Membuat fungsi pemasukan, pengeluaran, dan penambahan saldo"
